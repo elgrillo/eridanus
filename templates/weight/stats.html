@@ -1,0 +1,34 @@
+{% extends "/layout/base.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block header %}
+{{ super() }}
+{% endblock %}
+{% block content%}
+<h1>Stats</h1>
+
+<p>Count: {{stats.count}} </p>
+<p>Max Distance (km): {{stats.max_distance}} </p>
+<p>Max Time (min): {{stats.max_time}} </p>
+<p>Max Speed (km/h): {{'{:10.2}'.format(stats.max_speed)}} </p>
+<p>Total Distance (km): {{stats.total_distance}} </p>
+<p>Total Time (min): {{stats.total_time}} </p>
+<p>Avg Distance (km): {{stats.avg_distance}} </p>
+<p>Avg Time (min): {{stats.avg_time}} </p>
+<p>Avg Speed (km/h): {{'{:10.2}'.format(stats.avg_speed)}} </p>
+
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+    /*$(function () {
+        var time = parseFloat($('#time').text());
+        var distance = parseFloat($('#distance').text());
+        var speed = distance / (time/60);
+
+        $('#speed').text(speed.toFixed(2));
+    });*/
+</script>
+{% endblock %}

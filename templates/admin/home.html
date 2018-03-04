@@ -1,0 +1,17 @@
+{% extends '/layout/base.html' %}
+{% block title %}Eridanus::Weight{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block header %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<h1>Admin</h1>
+
+<ul class="nav nav-pills nav-stacked">
+    <li><a href="/admin/export">Export data</a></li>
+    <li><a href="/admin/import">Import data</a></li>
+    <li><a href="/admin/import">Users</a></li>
+</ul>
+{% endblock %}
