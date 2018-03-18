@@ -25,7 +25,7 @@ class RunningService(CrudService):
             else:
                 speed = model.distance / (duration / 60.0)
 
-            item = {'duration': duration, 
+            item = {'duration': duration,
                     'distance': model.distance,
                     'speed': speed,
                     'activity_date': format_date(model.activity_date),
@@ -36,8 +36,8 @@ class RunningService(CrudService):
 
     def _compute_records(self, items):
         records = {'max_distance': 0,
-                   'max_time': 0, 
-                   'max_speed': 0.0, 
+                   'max_time': 0,
+                   'max_speed': 0.0,
                    'max_calories': 0}
         for item in items:
             if records['max_distance'] < item['distance']:

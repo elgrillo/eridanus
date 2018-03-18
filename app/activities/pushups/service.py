@@ -15,7 +15,7 @@ class PushupsService(CrudService):
         if models is not None:
             for model in models:
                 item = {'activity_time': format_time(model.activity_time),
-                        'activity_date': format_date(model.activity_date), 
+                        'activity_date': format_date(model.activity_date),
                         'count': model.count,
                         'calories': model.calories,
                         'duration': model.duration,

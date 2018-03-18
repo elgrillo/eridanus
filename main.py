@@ -29,6 +29,7 @@ def home():
     controller = HomeController()
     return controller.index()
 
+
 @app.route('/admin')
 def admin():
     controller = AdminController()
@@ -40,12 +41,13 @@ def admin_export():
     controller = AdminController()
     return controller.export()
 
+
 @app.route('/admin/import')
 def admin_import():
     controller = AdminController()
     return controller.import_data()
 
-# RUNNING 
+# RUNNING
 # @app.route('/activities/runnings')
 # def runnings():
 #     controller = RunController()
