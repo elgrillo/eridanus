@@ -3,9 +3,8 @@ from flask import Flask, render_template, make_response, redirect, request, sess
 from flask_wtf import FlaskForm, CSRFProtect
 from flask_wtf.csrf import CSRFError, generate_csrf
 from models import Run, Weight
-from ndb_repository import RunRepository, WeightRepository, PushUpsRepository, CrunchesRepository
-from apps.eridanus.models import Run, Weight
-from apps.eridanus.forms import RunForm, PushUpForm, WeightForm, CrunchActivityForm
+from ndb_repository import RunRepository, WeightRepository, CrunchesRepository
+from forms import WeightForm, CrunchActivityForm
 from datetime import datetime
 from zipfile import ZipFile
 from StringIO import StringIO
@@ -14,6 +13,7 @@ import csv
 
 ERIDANUS_TIME_FORMAT = '%I:%M %p'
 ERIDANUS_DATE_FORMAT = '%d %b %Y'
+
 
 class AuthController(object):
     def __init__(self):
@@ -268,148 +268,15 @@ class HomeController(AuthController):
     def index(self):
         self._load_data()
         return render_template('index.html', stats=self)
-
-
-class RunController(AuthController):
-    ''' Run controller '''
-
+    
+    
+class ActivitiesController(AuthController):
+    
     def __init__(self):
-        super(RunController, self).__init__()
-        self.repository = RunRepository()
-
-    def list(self):
-        ''' create the viewmodel and return the view '''
-        items = self._fetch()
-        records = self._compute_records(items)
-        return render_template('/run/runningHome.html', 
-                               vm={'items': items, 
-                                   'records': records})
-
-    def _fetch(self):
-        items = []
-        models = self.repository.fetch_all()
-        for model in models:
-            duration = self._get_duration(model)
-            speed = 'N/A'
-            if model.speed:
-                speed = model.speed
-            else:
-                speed = model.distance / (duration / 60.0)
-
-            item = {'duration': duration, 
-                    'distance': model.distance, 
-                    'speed': speed, 
-                    'activity_date': self._get_activity_date(model).strftime(ERIDANUS_DATE_FORMAT), 
-                    'activity_time': self._get_activity_time(model).strftime(ERIDANUS_TIME_FORMAT),
-                    'calories': model.calories}
-            items.append(item)
-        return items
-
-    def _get_activity_date(self, model):
-        if model.activity_date:
-            return model.activity_date
-        else:
-            return model.date
-
-    def _get_activity_time(self, model):
-        if model.activity_time:
-            return model.activity_time
-        else:
-            return datetime.strptime(u'20:30','%H:%M').time()
-
-    def _get_duration(self, model):
-        if model.duration:
-            return model.duration
-        else:
-            return model.time
-
-    def _compute_records(self, items):
-        records = {'max_distance': 0, 
-                   'max_time': 0, 
-                   'max_speed': 0.0, 
-                   'max_calories': 0}
-        for item in items:
-            if records['max_distance'] < item['distance']:
-                records['max_distance'] = item['distance']
-            if records['max_time'] < item['duration']:
-                records['max_time'] = item['duration']
-            if records['max_speed'] < item['speed']:
-                records['max_speed'] = item['speed']
-            if records['max_calories'] < item['calories']:
-                records['max_calories'] = item['calories']
-        return records
-
-
-    def save(self):
-        form = RunForm()
-
-        distance = float(form.distance.data)
-        duration = form.duration.data
-        speed = distance / (float(duration)/60.0)
+        super(ActivitiesController,self).__init__()
         
-        self.repository.create(
-            {
-                'activity_date': form.activity_date.data,
-                'activity_time': datetime.strptime(form.activity_time.data, '%H:%M').time(),
-                'distance': distance,
-                'duration': duration,
-                'calories': form.calories.data,
-                'notes': form.notes.data,
-                'speed': speed,
-                'user_nickname': session['nickname']
-            })
-        return redirect(url_for('runnings'), 302)
-
-    def new(self):
-        form = RunForm()
-        return self.render_form_template('run/createRunning.html', form=form)
-
-
-class PushUpsController(AuthController):
-    ''' Push-ups controller '''
-
-    def __init__(self):
-        super(PushUpsController, self).__init__()
-        self.repository = PushUpsRepository()
-
-    def list(self):
-        ''' creates and returns the view and viewmodel '''
-        items = []
-        models = self.repository.fetch_all()
-        if models is not None:
-            for model in models:
-                item = {'activity_time': model.activity_time.strftime(ERIDANUS_TIME_FORMAT),
-                        'activity_date': model.activity_date.strftime(ERIDANUS_DATE_FORMAT), 
-                        'count': model.count, 
-                        'calories': model.calories,
-                        'duration': model.duration, 
-                        'notes': model.notes}
-                items.append(item)
-        return render_template('pushups/pushupsHome.html', 
-                               viewmodel={'items': items})
-
-    def get_create_form(self):
-        form = PushUpForm()
-        return self.render_form_template('pushups/createPushup.html', form=form)
-
-
-    def add_pushup(self):
-        form = PushUpForm(request.form)
-
-        self.repository.create({
-            'activity_date': form.activity_date.data,
-            'activity_time': datetime.strptime(form.activity_time.data, '%H:%M').time(),
-            'duration': form.duration.data,
-            'calories': form.calories.data,
-            'count': form.count.data,
-            'notes': form.notes.data,
-            'user_nickname': session['nickname']
-            })
-        return redirect(url_for('pushups'), 302)
-
-
-    def delete(self):
-        pass
+    def index(self):
+        return render_template('/activities/index.html', vm={})
 
 
 class CrunchesController(AuthController):
