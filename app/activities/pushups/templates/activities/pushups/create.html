@@ -6,7 +6,7 @@
 {% endblock %}
 {% block content %}
 <h1>Push-up activity</h1>
-<form action="/pushups/activities/create/" method="post">
+<form action="/activities/pushups/create/" method="post">
     {{ form.csrf_token }}
     <div class="form-group">
         <label for="activity_date">Activity Date</label>

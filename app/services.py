@@ -1,12 +1,13 @@
 from abc import ABCMeta, abstractmethod
 import six
-import warnings
+# import warnings
+
 
 @six.add_metaclass(ABCMeta)
 class CrudService(object):
-    
+
     @abstractmethod
-    def list(self):
+    def fetch_all(self, username):
         return NotImplemented
 
     @abstractmethod
@@ -16,7 +17,7 @@ class CrudService(object):
     @abstractmethod
     def read(self, activity_id):
         return NotImplemented
-    
+
     @abstractmethod
     def update(self, activity):
         return NotImplemented
@@ -24,8 +25,3 @@ class CrudService(object):
     @abstractmethod
     def delete(self, activity_id):
         return NotImplemented
-
-
-
-
-    

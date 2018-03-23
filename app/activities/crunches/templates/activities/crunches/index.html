@@ -1,5 +1,5 @@
 {% extends "/layout/base.html" %}
-{% block title %}Push-ups{% endblock %}
+{% block title %}Crunches{% endblock %}
 {% block head %}
 {{ super() }}
 <style>
@@ -23,9 +23,9 @@
 {{ super() }}
 {% endblock %}
 {% block content%}
-<h1>Push-ups</h1>
+<h1>Crunches</h1>
 <div>
-    <a href="/pushups/activities/create/" class="btn btn-default active" role="button">
+    <a href="/activities/crunches/create/" class="btn btn-default active" role="button">
         <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  Add
     </a>
 </div>
@@ -39,7 +39,7 @@
     {% endif %}
     {% if item.count %}
     <br />
-    <strong class="value">{{ item.count }}</strong> push-ups
+    <strong class="value">{{ item.count }}</strong> crunches
     {% endif %}
     {% if item.calories is not none %}
     <br />

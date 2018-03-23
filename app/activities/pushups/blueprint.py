@@ -1,15 +1,15 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, \
     render_template, request, session, url_for
-from apps.eridanus.ndb_repository import PushUpsRepository
-from .service import PushupsService
-from .forms import PushupForm
+from ..forms import PushupForm
+from ..services import PushupsService
+
 
 pushup_activities = Blueprint(
     'pushup_activities',
     __name__,
     template_folder='templates')
-service = PushupsService(PushUpsRepository())
+service = PushupsService()
 
 
 def _validate_form(form):
@@ -20,9 +20,14 @@ def _validate_form(form):
 @pushup_activities.route("/")
 @pushup_activities.route("/list/")
 def index():
-    items = service.list()
-    return render_template(
-        'pushupsHome.html', viewmodel={'items': items})
+    username = session['nickname']
+    if username:
+        items = service.fetch_all(username)
+        return render_template(
+            'activities/pushups/index.html', viewmodel={'items': items})
+    else:
+        # TODO: redirect to the authentication page
+        pass
 
 
 @pushup_activities.route("/create/", methods=['GET', 'POST'])
@@ -46,7 +51,7 @@ def create():
             return redirect(url_for('pushup_activities.index'), 302)
     else:
         form = PushupForm()
-        return render_template('createPushup.html', form=form)
+        return render_template('activities/pushups/create.html', form=form)
 
 
 @pushup_activities.route('/<activity_id>/', methods=['GET', 'POST'])
@@ -54,7 +59,7 @@ def view(activity_id):
     ''' REVIEW: TEST: TODO: '''
     activity = service.fetch(activity_id)
     if activity:
-        return render_template('viewPushup.html', activity)
+        return render_template('activities/pushups/view.html', activity)
     else:
         return redirect(url_for('app.page_not_found', 302))
 
@@ -89,7 +94,9 @@ def edit(activity_id):
         if activity:
             form = PushupForm()
             form.activity_date = activity['activity_date']
-            return render_template('editPushup.html', form=form)
+            return render_template(
+                'activities/pushups/edit.html',
+                form=form)
         else:
             pass  # TODO: if None then return 404 .first_or_404()
 

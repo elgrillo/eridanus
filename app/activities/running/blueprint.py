@@ -1,11 +1,10 @@
 from flask import Blueprint, flash, render_template, \
     redirect, session, request, url_for
 from datetime import datetime
-from apps.eridanus.ndb_repository import RunRepository
-from .forms import RunForm
-from .service import RunningService
+from ..forms import RunningForm
+from ..services import RunningService
 
-service = RunningService(RunRepository())
+service = RunningService()
 
 running_activities = Blueprint(
     'running_activities',
@@ -22,14 +21,16 @@ def _validate_form(form):
 @running_activities.route("/list/")
 def index():
     ''' create the viewmodel and return the view '''
-    items = service.list()
-    return render_template('/runningHome.html', vm=items)
+    username = session['nickname']
+    if username:
+        items = service.fetch_all(username)
+        return render_template('/runningHome.html', vm=items)
 
 
 @running_activities.route("/create/", methods=["GET", "POST"])
 def create():
     if request.method == "POST":
-        form = RunForm()
+        form = RunningForm()
         if _validate_form(form):
             distance = float(form.distance.data)
             duration = form.duration.data
@@ -51,13 +52,13 @@ def create():
             flash('Activity "%s" created successfully.', 'success')
             return redirect(url_for('running_activities.index'), 302)
     else:
-        form = RunForm()
+        form = RunningForm()
         return render_template('createRunning.html', form=form)
 
 
 # @running_activities.route("/edit/<activity>/", methods = ["GET"])
 # def read():
-#     form = RunForm()
+#     form = RunningForm()
 #     return render_template('edit.html', form=form)
 
 

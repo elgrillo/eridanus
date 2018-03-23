@@ -6,7 +6,7 @@
 {% endblock %}
 {% block content %}
 	<h1>Running exercise</h1>
-    <form action="/running/activities/create/" method="post">
+    <form action="/activities/running/create/" method="post">
         {{ form.csrf_token }}
         <div class="form-group">
             <label for="activity_date">Activity Date</label>
