@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, render_template, \
     redirect, request, session, url_for
 from .forms import WeightForm
-from .service import WeighingService
+from .services import WeighingService
 
 
 weighings = Blueprint("weighings", __name__, template_folder='templates')

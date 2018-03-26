@@ -4,7 +4,6 @@ from flask import render_template, \
 from datetime import datetime
 from zipfile import ZipFile
 from StringIO import StringIO
-from models import Run, Weight
 from repository import RunRepository, WeightRepository
 
 import csv
@@ -130,7 +129,7 @@ class AdminController(AuthController):
         if model.activity_time:
             return model.activity_time
         else:
-            return datetime.strptime(u'20:30','%H:%M').time()
+            return datetime.strptime(u'20:30', '%H:%M').time()
 
     def _get_duration(self, model):
         if model.duration:
@@ -143,127 +142,3 @@ class AdminController(AuthController):
 
     def index(self):
         return render_template('admin/home.html')
-
-
-class HomeController(AuthController):
-    ''' statistics class 
-    Is this a model class a controller or a controller class? Not very clear
-    TODO: to be reviewed
-    '''
-    # pylint: disable=too-many-instance-attributes
-    # TODO maybe I should review this class as it could have to many responsabilities
-    # a run statistic class can be created a weight stats and so on
-    # https://softwareengineering.stackexchange.com/questions/302549/how-does-having-too-many-instance-variables-lead-to-duplicate-code
-        
-    def __init__(self):
-        super(HomeController, self).__init__()
-
-        self.date_last_run = None
-        self.max_calories = 0
-        self.max_distance = 0
-        self.max_speed = 0.0
-        self.max_time = 0
-        self.min_weight = 0
-        self.total_calories = 0
-        self.total_distance = 0
-        self.total_time = 0
-        self.avg_calories = 0
-        self.avg_speed = 0.0
-        self.avg_distance = 0.0
-        self.avg_time = 0
-        self.count = 0
-        self.days_past_from_last_run = 0
-        self.weight_trend = 0
-        self.last_weight = 0
-        self.weight_growth_rate_20 = 0
-        self.avg_weight_20 = 0
-
-    def _load_data(self):
-        run_items = Run.query().fetch()
-
-        self.count = len(run_items)
-        if self.count > 0:
-            total_speed = 0
-            for item in run_items:
-                activity_date = self._get_activity_date(item)
-                duration = self._get_duration(item)
-                if item.calories:
-                    self.total_calories += item.calories
-                    if item.calories > self.max_calories:
-                        self.max_calories = item.calories
-                self.total_distance += item.distance
-                self.total_time += duration
-                if item.distance > self.max_distance:
-                    self.max_distance = item.distance
-                if duration > self.max_time:
-                    self.max_time = duration
-                speed = item.speed
-                if item.speed is None:
-                    speed = item.distance / (duration / 60.0)
-                total_speed += speed
-                if speed > self.max_speed:
-                    self.max_speed = speed
-                if self.date_last_run is None or activity_date > self.date_last_run:
-                    self.date_last_run = activity_date
-                    self.days_past_from_last_run = self._get_days_past_from_last_run(self.date_last_run)
-            if self.count > 0:
-                self.avg_calories = self.total_calories / self.count
-                self.avg_distance = float(self.total_distance) / float(self.count)
-                self.avg_time = self.total_time / self.count
-                self.avg_speed = total_speed / self.count
-        # computing weight stats
-        weight_items = Weight.query().order(-Weight.creation_datetime).fetch()
-        if len(weight_items) > 0:
-            self.last_weight = weight_items[0].weight
-        recno_weight = len(weight_items)
-        if recno_weight > 0:
-            total_weight_last20 = 0.0
-            count = 0
-            for item in weight_items:
-                if count < 20:
-                    count += 1
-                    total_weight_last20 += item.weight
-                    continue
-                break
-            self.avg_weight_20 = total_weight_last20 / float(count)
-            self.weight_growth_rate_20 = (
-                1.0 - self.avg_weight_20 / self.last_weight) * 100.0
-            if self.weight_growth_rate_20 < 0:
-                self.weight_trend = '{:0.2f}% AVG20: {:0.1f} kg'.format(
-                    self.weight_growth_rate_20, self.avg_weight_20)
-            elif self.weight_growth_rate_20 > 0:
-                self.weight_trend = '{:0.1f}% AVG20: {:0.1f} kg'.format(
-                    self.weight_growth_rate_20, self.avg_weight_20)
-
-    def _get_activity_date(self, model):
-        if model.activity_date:
-            return model.activity_date
-        else:
-            return model.date
-
-    def _get_duration(self, model):
-        if model.duration:
-            return model.duration
-        else:
-            return model.time
-    
-    def _get_days_past_from_last_run(self, date_last_run):
-        if date_last_run:
-            diff = abs(datetime.now().date() - date_last_run)
-            return diff.days
-        return None
-
-    def get_day_from_last_run_class(self):
-        if self.days_past_from_last_run is None:
-            return ''
-        diff = self.days_past_from_last_run
-        if diff < 3:
-            return 'label-success'
-        elif diff < 4:
-            return 'label-warning'
-        else:
-            return 'label-danger'
-
-    def index(self):
-        self._load_data()
-        return render_template('index.html', stats=self)

@@ -25,6 +25,12 @@ indexes:
 - kind: Run
   properties:
   - name: usernickname
+  - name: activity_date
+    direction: desc
+
+- kind: Run
+  properties:
+  - name: usernickname
   - name: creation_datetime
     direction: desc
 
