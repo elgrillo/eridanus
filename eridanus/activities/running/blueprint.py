@@ -24,7 +24,7 @@ def index():
     username = session['nickname']
     if username:
         items = service.fetch_all(username)
-        return render_template('/runningHome.html', vm=items)
+        return render_template('activities/running/index.html', vm=items)
 
 
 @running_activities.route("/create/", methods=["GET", "POST"])
@@ -53,7 +53,7 @@ def create():
             return redirect(url_for('running_activities.index'), 302)
     else:
         form = RunningForm()
-        return render_template('createRunning.html', form=form)
+        return render_template('activities/running/create.html', form=form)
 
 
 # @running_activities.route("/edit/<activity>/", methods = ["GET"])

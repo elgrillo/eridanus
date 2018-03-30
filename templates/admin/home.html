@@ -10,8 +10,25 @@
 <h1>Admin</h1>
 
 <ul class="nav nav-pills nav-stacked">
-    <li><a href="/admin/export">Export data</a></li>
-    <li><a href="/admin/import">Import data</a></li>
-    <li><a href="/admin/import">Users</a></li>
+    <li><a id="exportcsv" href="#">Export all data (.csv)</a></li>
+    <!--<li><a href="/admin/import">Import data</a></li>
+    <li><a href="/admin/import">Users</a></li>-->
 </ul>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+
+    function download(url) {
+        window.location.href = url;
+    }
+
+    $(function() {
+        $('#exportcsv').click(function(e) {
+            e.preventDefault();
+            download("export/csv/");
+        })
+    })
+</script>
+
 {% endblock %}

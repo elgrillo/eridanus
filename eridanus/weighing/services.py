@@ -1,4 +1,4 @@
-from repository import WeightRepository
+from eridanus.repository import WeightRepository
 from ..services import CrudService
 from ..utils import format_date
 

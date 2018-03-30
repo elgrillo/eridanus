@@ -1,4 +1,4 @@
-from repository import StatisticsRepository
+from eridanus.repository import StatisticsRepository
 
 
 class DashboardService(object):
@@ -7,7 +7,8 @@ class DashboardService(object):
     TODO: to be reviewed
     '''
     # pylint: disable=too-many-instance-attributes
-    # TODO maybe I should review this class as it could have to many responsabilities
+    # TODO maybe I should review this class as it could 
+    # have to many responsabilities
     # a run statistic class can be created a weight stats and so on
     # https://softwareengineering.stackexchange.com/questions/302549/how-does-having-too-many-instance-variables-lead-to-duplicate-code
     def __init__(self):

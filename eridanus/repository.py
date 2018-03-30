@@ -1,5 +1,6 @@
-from models import Crunch, Run, Weight, PushUp
 from datetime import datetime
+
+from eridanus.models import Crunch, Run, Weight, PushUp
 
 
 class Repository(object):

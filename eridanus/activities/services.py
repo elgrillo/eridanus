@@ -5,7 +5,7 @@ from ..services import CrudService
 class CrunchesService(CrudService):
 
     def __init__(self):
-        from repository import CrunchesRepository
+        from eridanus.repository import CrunchesRepository
         self.repository = CrunchesRepository()
 
     def fetch_all(self, username):
@@ -39,7 +39,7 @@ class PushupsService(CrudService):
     ''' Push-ups controller '''
 
     def __init__(self):
-        from repository import PushUpsRepository
+        from eridanus.repository import PushUpsRepository
         self.repository = PushUpsRepository()
 
     def fetch_all(self, username):
@@ -71,9 +71,9 @@ class PushupsService(CrudService):
 
 
 class RunningService(CrudService):
- 
+
     def __init__(self):
-        from repository import RunRepository
+        from eridanus.repository import RunRepository
         self.repository = RunRepository()
 
     def fetch_all(self, username):

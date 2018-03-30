@@ -2,13 +2,14 @@ from google.appengine.api import users
 from flask import Flask, redirect, render_template, session, url_for
 from flask_wtf import CSRFProtect
 from flask_wtf.csrf import CSRFError
-from controllers import AdminController
-from app.activities.crunches.blueprint import crunches
-from app.activities.running.blueprint import running_activities
-from app.activities.pushups.blueprint import pushup_activities
-from app.dashboard.blueprint import dashboard
-from app.weighing.blueprint import weighings
+
 from config import Configuration
+from eridanus.admin.blueprint import admin
+from eridanus.activities.crunches.blueprint import crunches
+from eridanus.activities.running.blueprint import running_activities
+from eridanus.activities.pushups.blueprint import pushup_activities
+from eridanus.dashboard.blueprint import dashboard
+from eridanus.weighing.blueprint import weighings
 
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ csrf = CSRFProtect(app)
 app.config['DEBUG'] = True
 # app.config['WTF_CSRF_SECRET_KEY'] = False
 app.config['SECRET_KEY'] = Configuration.SECRET_KEY
+app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(crunches, url_prefix='/activities/crunches')
 app.register_blueprint(pushup_activities, url_prefix='/activities/pushups')
 app.register_blueprint(running_activities, url_prefix="/activities/running")
@@ -42,24 +44,6 @@ def check_authentication():
 @csrf.exempt
 def home():
     return redirect(url_for('dashboard.index'), 302)
-
-
-@app.route('/admin')
-def admin():
-    controller = AdminController()
-    return controller.index()
-
-
-@app.route('/admin/export')
-def admin_export():
-    controller = AdminController()
-    return controller.export()
-
-
-@app.route('/admin/import')
-def admin_import():
-    controller = AdminController()
-    return controller.import_data()
 
 
 @app.errorhandler(CSRFError)
