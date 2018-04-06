@@ -68,7 +68,7 @@ class ImportDataServices(object):
         audit['default_bucket'] = default_bucket
         if default_bucket:
             import_folder = "/" + default_bucket + '/import/' + folder
-            #self._import_run_csv(import_folder)
+            # self._import_run_csv(import_folder)
             self._import_weight_csv(import_folder)
 
     def _get_default_bucket(self):
@@ -100,14 +100,17 @@ class ImportDataServices(object):
                 speed = distance / (duration / 60.0)
             repo.create({
                 'user_nickname': row['usernickname'],
-                'activity_date': to_date(row['activity_date'], IMPORT_DATE_FORMAT),
-                'activity_time': to_time(row['activity_time'], IMPORT_TIME_FORMAT),
+                'activity_date': to_date(
+                    row['activity_date'], IMPORT_DATE_FORMAT),
+                'activity_time': to_time(
+                    row['activity_time'], IMPORT_TIME_FORMAT),
                 'duration': duration,
                 'distance': distance,
                 'speed': speed,
                 'calories': int(row['calories']),
                 'notes': row['notes'],
-                'creation_datetime': to_datetime(row['creation_datetime'], IMPORT_DATETIME_FORMAT)
+                'creation_datetime': to_datetime(
+                    row['creation_datetime'], IMPORT_DATETIME_FORMAT)
             })
         audit['filename'] = filename
         return audit
@@ -122,6 +125,8 @@ class ImportDataServices(object):
             repo.create({
                 'user_nickname': row['usernickname'],
                 'weight': float(row['weight']),
-                'weighing_date': to_date(row['creation_datetime'], IMPORT_DATETIME_FORMAT),
-                'creation_datetime': to_datetime(row['creation_datetime'], IMPORT_DATETIME_FORMAT)
+                'weighing_date': to_date(
+                    row['creation_datetime'], IMPORT_DATETIME_FORMAT),
+                'creation_datetime': to_datetime(
+                    row['creation_datetime'], IMPORT_DATETIME_FORMAT)
             })
