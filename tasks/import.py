@@ -1,3 +1,4 @@
+from google.appengine.api import app_identity
 from flask import render_template, \
     make_response
 from datetime import datetime
@@ -5,11 +6,66 @@ from zipfile import ZipFile
 from StringIO import StringIO
 from repository import RunRepository, WeightRepository
 
+import cloudstorage as gcs
 import csv
+import os
 
 
-def import_from_csv():
-    pass
+def _get_default_bucket():
+    bucket_name = os.environ.get(
+        'BUCKET_NAME',
+        app_identity.get_default_gcs_bucket_name())
+    return bucket_name
+
+
+def _read_file(filename):
+    gcs_file = gcs.open(filename)
+    contents = gcs_file.read()
+    gcs_file.close()
+    return contents
+
+
+def import_from_csv(folder):
+    default_bucket = _get_default_bucket()
+    if default_bucket:
+        import_folder = default_bucket + '/import/' + folder
+        _import_run_csv(import_folder)
+        _import_weight_csv(import_folder)
+
+
+def _import_run_csv(import_folder):
+    filename = import_folder + '/run.csv'
+    content = _read_file(filename)
+    stream = StringIO(content)
+    csvReader = csv.DictReader(stream, dialect='excel')
+    for row in csvReader:
+        repo = RunRepository()
+        repo.create({
+            'user_nickname': row['usernickname'],
+            'activity_date': row['activity_date'],
+            'activity_time': row['activity_time'],
+            'duration': row['duration'],
+            'distance': row['distance'],
+            'speed': row['speed'],
+            'calories': row['calories'],
+            'notes': row['notes'],
+            'creation_datetime': row['creation_datetime']
+        })
+
+
+def _import_weight_csv(import_folder):
+    filename = import_folder + '/weight.csv'
+    content = _read_file(filename)
+    stream = StringIO(content)
+    csvReader = csv.DictReader(stream, dialect='excel')
+    for row in csvReader:
+        repo = WeightRepository()
+        repo.create({
+            'user_nickname': row['usernickname'],
+            'weight': row['weight'],
+            'weighing_date': row['creation_datetime'],
+            'creation_datetime': row['creation_datetime']
+        })
 
 
 def export_csv():
@@ -21,9 +77,9 @@ def export_csv():
     zip.writestr("weight.csv", weight_csv)
     # fix for Linux zip files read in Windows
     for file in zip.filelist:
-        file.create_system = 0    
+        file.create_system = 0
     zip.close()
-    in_memory.seek(0) 
+    in_memory.seek(0)
     response = make_response(in_memory.read())
     response.headers["Content-Disposition"] = "attachment; filename=eridanus_data.zip"
     response.headers['Cache-Control'] = 'no-cache'
@@ -36,7 +92,10 @@ def export_csv():
 def _build_run_csv():
     items = _fetch_all_run()
     stream = StringIO()
-    fieldnames = ['usernickname', 'activity_date', 'activity_time', 'time', 'distance', 'speed', 'calories', 'notes', 'creation_datetime']
+    fieldnames = [
+        'usernickname', 'activity_date', 'activity_time',
+        'duration', 'distance', 'speed',
+        'calories', 'notes', 'creation_datetime']
     csvwriter = csv.DictWriter(stream, fieldnames=fieldnames, dialect='excel')
     csvwriter.writeheader()
     for item in items:

@@ -1,7 +1,7 @@
 from flask import Blueprint, make_response, render_template, session
 from StringIO import StringIO
 from zipfile import ZipFile
-from .services import ExportDataService
+from .services import ExportDataService, ImportDataServices
 
 
 admin = Blueprint('admin', __name__, template_folder='templates')
@@ -47,6 +47,12 @@ def export(format):
     return response
 
 
-@admin.route('/import/', methods=['GET'])
-def import_index():
-    return NotImplemented
+@admin.route('/import/<folder>', methods=['GET'])
+def import_index(folder):
+    service = ImportDataServices()
+    username = session['nickname']
+    data = service.import_from_csv(folder, username)
+    response = make_response()
+    response.headers['Content-Type'] = 'text/plain'
+    response.write(data)
+    return response

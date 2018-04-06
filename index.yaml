@@ -13,16 +13,10 @@ indexes:
 - kind: Crunch
   properties:
   - name: usernickname
-  - name: creation_datetime
+  - name: activity_date
     direction: desc
 
 - kind: PushUp
-  properties:
-  - name: usernickname
-  - name: creation_datetime
-    direction: desc
-
-- kind: Run
   properties:
   - name: usernickname
   - name: activity_date
@@ -31,11 +25,11 @@ indexes:
 - kind: Run
   properties:
   - name: usernickname
-  - name: creation_datetime
+  - name: activity_date
     direction: desc
 
 - kind: Weight
   properties:
   - name: usernickname
-  - name: creation_datetime
+  - name: weighing_date
     direction: desc

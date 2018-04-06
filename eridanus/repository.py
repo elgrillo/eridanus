@@ -31,7 +31,7 @@ class RunRepository(Repository):
     def fetch_all(self, username):
         ''' fetch data from data store '''
         query = Run.query(Run.usernickname == username)
-        return query.order(-Run.creation_datetime).fetch()
+        return query.order(-Run.activity_date).fetch()
 
     def fetch(activity_id):
         NotImplemented
@@ -50,7 +50,7 @@ class WeightRepository(Repository):
     def fetch_all(self, username):
         return (Weight
                 .query(Weight.usernickname == username)
-                .order(-Weight.creation_datetime)
+                .order(-Weight.weighing_date)
                 .fetch()
                 )
 
@@ -95,7 +95,7 @@ class PushUpsRepository(Repository):
     def fetch_all(self, username):
         ''' fetch data from data store '''
         query = PushUp.query(PushUp.usernickname == username)
-        return query.order(-PushUp.creation_datetime).fetch()
+        return query.order(-PushUp.activity_date).fetch()
 
     def fetch(activity_id):
         NotImplemented
@@ -108,7 +108,7 @@ class CrunchesRepository(Repository):
 
     def fetch_all(self, username):
         query = Crunch.query(Crunch.usernickname == username)
-        return query.order(-Crunch.creation_datetime).fetch()
+        return query.order(-Crunch.activity_date).fetch()
 
     def create(self, dict):
         model = Crunch()
@@ -226,7 +226,7 @@ class StatisticsRepository(Repository):
         items = (
                     Weight
                     .query(Weight.usernickname == username)
-                    .order(-Weight.creation_datetime)
+                    .order(-Weight.weighing_date)
                     .fetch()
                 )
         count = len(items)
