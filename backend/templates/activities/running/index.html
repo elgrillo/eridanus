@@ -1,0 +1,71 @@
+{% extends "/layout/base.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+<style>
+    div.detail {
+        font-size: 12px;
+        line-height: 1;
+        padding: 4px;
+        margin: 4px 0px;
+        color: dimgray;
+    }
+    strong.date {
+
+    }
+    strong.value {
+        color: #000;
+    }
+</style>
+{% endblock %}
+{% block header %}
+{{ super() }}
+{% endblock %}
+{% block content%}
+<h1>Run</h1>
+<div>
+    <a href="/activities/running/create/" class="btn btn-default active" role="button">
+        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  Add
+    </a>
+</div>
+
+{% for item in vm['items'] %}
+<div class="detail">
+    {{ item.activity_date }}  {{ item.activity_time }}<br />
+    <strong class="value"> {{ item.duration }}</strong> min
+    {% if item.duration == vm['records']['max_time'] %}
+    <span class="glyphicon glyphicon-star" aria-hidden="true" style="color:yellowgreen;"></span>
+    {% endif %}
+    <br />
+    <strong class="value"> {{ item.distance }}</strong> km
+    {% if item.distance == vm['records']['max_distance'] %}
+    <span class="glyphicon glyphicon-star" aria-hidden="true" style="color:yellowgreen;"></span>
+    {% endif %}
+    <br />
+    <strong class="value"> {{ '{0:.2f}'.format(item.speed) }}</strong> km/h
+    {% if item.speed == vm['records']['max_speed'] %}
+    <span class="glyphicon glyphicon-star" aria-hidden="true" style="color:yellowgreen;"></span>
+    {% endif %}
+    <!--<span class="glyphicons glyphicons-rabbit" aria-hidden="true"></span>-->
+    {% if item.calories %}
+    <br />
+    Calories: <strong class="value"> {{ item.calories }}</strong> kcal
+    {% if item.calories == vm['records']['max_calories'] %}
+    <span class="glyphicon glyphicon-star" aria-hidden="true" style="color:yellowgreen;"></span>
+    {% endif %}
+    {% endif %}
+</div>
+{% endfor %}
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+    /*$(function () {
+        var time = parseFloat($('#time').text());
+        var distance = parseFloat($('#distance').text());
+        var speed = distance / (time/60);
+
+        $('#speed').text(speed.toFixed(2));
+    });*/
+</script>
+{% endblock %}

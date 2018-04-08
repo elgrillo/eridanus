@@ -1,0 +1,2 @@
+ERIDANUS_TIME_FORMAT = '%I:%M %p'
+ERIDANUS_DATE_FORMAT = '%d %b %Y'
