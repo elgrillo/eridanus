@@ -66,7 +66,7 @@
     <div class="panel-body stats-panel">
         <!--<h5><strong>Averages</strong></h5>-->
         <p>Avg Distance: <span class="stats-number">{{'{0:.2f}'.format(stats.avg_distance)}}</span> km</p>
-        <p>Avg Time: <span class="stats-number">{{stats.avg_time}}</span> minutes</p>
+        <p>Avg Time: <span class="stats-number">{{'{:.0f}'.format(stats.avg_time)}}</span> minutes</p>
         <p>Avg Speed: <span class="stats-number">{{'{0:.2f}'.format(stats.avg_speed)}}</span> km/h</p>
     </div>
 </div>

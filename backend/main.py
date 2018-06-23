@@ -11,7 +11,7 @@ from eridanus.activities.pushups.blueprint import pushup_activities
 from eridanus.dashboard.blueprint import dashboard
 from eridanus.weighing.blueprint import weighings
 
-from eridanus.api.v1 import api
+from eridanus.api.v1 import api_blueprint
 
 
 app = Flask(__name__)
@@ -25,7 +25,7 @@ app.register_blueprint(pushup_activities, url_prefix='/activities/pushups')
 app.register_blueprint(running_activities, url_prefix="/activities/running")
 app.register_blueprint(weighings, url_prefix='/weighings')
 app.register_blueprint(dashboard, url_prefix='/dashboard')
-app.register_blueprint(api, url_prefix='/api/v1')
+app.register_blueprint(api_blueprint, url_prefix='/api/v1')
 
 
 # Note: We don't need to call run() since our application is embedded within

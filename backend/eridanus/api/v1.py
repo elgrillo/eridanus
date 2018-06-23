@@ -1,25 +1,27 @@
 from flask import Blueprint
-from flask import jsonify
-from flask import session
-from eridanus.dashboard.services import DashboardService
-from eridanus.activities.services import RunningService
-
-api = Blueprint('api', __name__)
+from flask_restful import Api
+from .resources.dashboard import Dashboard
+from .resources.activities import Running
 
 
-@api.route('/stats/', methods=['GET'])
-def get_stats():
-    username = session['nickname']
-    if username:
-        stats = DashboardService().home_stats(username)
-        return jsonify(stats)
-    else:
-        return jsonify({'error': 'Access denied'})
+api_blueprint = Blueprint('api', __name__)
+api = Api(api_blueprint)
+api.add_resource(Dashboard, '/stats/')
+api.add_resource(Running, '/activities/running/')
+
+# @api.route('/stats/', methods=['GET'])
+# def get_stats():
+#     username = session['nickname']
+#     if username:
+#         stats = DashboardService().home_stats(username)
+#         return jsonify(stats)
+#     else:
+#         return jsonify({'error': 'Access denied'})
 
 
-@api.route('/activities/running/', methods=['GET'])
-def get_all_running_activities():
-    username = session['nickname']
-    if username:
-        data = RunningService().fetch_all(username)
-        return jsonify(data)
+# @api.route('/activities/running/', methods=['GET'])
+# def get_all_running_activities():
+#     username = session['nickname']
+#     if username:
+#         data = RunningService().fetch_all(username)
+#         return jsonify(data)

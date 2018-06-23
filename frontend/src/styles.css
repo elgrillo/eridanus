@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+
+div.detail {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: .5rem 0;
+    font-size: small;
+}
+
+@media screen and (min-width: 50rem) {
+    div .detail {
+        font-size: medium;
+    }
+}
