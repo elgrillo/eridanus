@@ -7,13 +7,14 @@ from datetime import datetime
 
 
 class ActivityForm(FlaskForm):
+    current_datetime = datetime.now() 
     activity_date = DateField(
         label='activity_date',
-        default=datetime.now(),
+        default=current_datetime,
         validators=[DataRequired])
     activity_time = TextField(
         label='activity_time',
-        default=datetime.now().time().strftime('%I:%M %p'),
+        default=current_datetime.time().strftime('%I:%M %p'),
         validators=[DataRequired])
     duration = IntegerField()
     calories = IntegerField()
