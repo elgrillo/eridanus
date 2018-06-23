@@ -16,6 +16,12 @@ indexes:
   - name: activity_date
     direction: desc
 
+- kind: JumpRope
+  properties:
+  - name: usernickname
+  - name: activity_date
+    direction: desc
+
 - kind: PushUp
   properties:
   - name: usernickname

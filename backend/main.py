@@ -8,6 +8,7 @@ from eridanus.admin.blueprint import admin
 from eridanus.activities.crunches.blueprint import crunches
 from eridanus.activities.running.blueprint import running_activities
 from eridanus.activities.pushups.blueprint import pushup_activities
+from eridanus.activities.jump_rope.blueprint import jump_rope_activities
 from eridanus.dashboard.blueprint import dashboard
 from eridanus.weighing.blueprint import weighings
 
@@ -21,6 +22,8 @@ app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = Configuration.SECRET_KEY
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(crunches, url_prefix='/activities/crunches')
+app.register_blueprint(jump_rope_activities, 
+                       url_prefix='/activities/jump_rope')
 app.register_blueprint(pushup_activities, url_prefix='/activities/pushups')
 app.register_blueprint(running_activities, url_prefix="/activities/running")
 app.register_blueprint(weighings, url_prefix='/weighings')

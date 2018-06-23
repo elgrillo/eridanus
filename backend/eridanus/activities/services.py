@@ -2,11 +2,10 @@ from ..utils import format_date, format_time
 from ..services import CrudService
 
 
-class CrunchesService(CrudService):
+class BaseActivityService(CrudService):
 
-    def __init__(self):
-        from eridanus.repository import CrunchesRepository
-        self.repository = CrunchesRepository()
+    def __init__(self, repository):
+        self.repository = repository
 
     def fetch_all(self, username):
         items = []
@@ -35,39 +34,25 @@ class CrunchesService(CrudService):
         return self.repository.delete(activity_id)
 
 
-class PushupsService(CrudService):
-    ''' Push-ups controller '''
+class CrunchesService(BaseActivityService):
+
+    def __init__(self):
+        from eridanus.repository import CrunchesRepository
+        super(CrunchesService, self).__init__(CrunchesRepository())
+
+
+class JumpRopeService(BaseActivityService):
+
+    def __init__(self):
+        from eridanus.repository import JumpRopeRepository
+        super(JumpRopeService, self).__init__(JumpRopeRepository())
+
+
+class PushupsService(BaseActivityService):
 
     def __init__(self):
         from eridanus.repository import PushUpsRepository
-        self.repository = PushUpsRepository()
-
-    def fetch_all(self, username):
-        ''' creates and returns the view and viewmodel '''
-        items = []
-        models = self.repository.fetch_all(username)
-        if models is not None:
-            for model in models:
-                item = {'activity_time': format_time(model.activity_time),
-                        'activity_date': format_date(model.activity_date),
-                        'count': model.count,
-                        'calories': model.calories,
-                        'duration': model.duration,
-                        'notes': model.notes}
-                items.append(item)
-        return items
-
-    def create(self, activity):
-        self.repository.create(activity)
-
-    def read(self, activity_id):
-        return NotImplemented
-
-    def update(self, activity):
-        return NotImplemented
-
-    def delete(self, activity_id):
-        return NotImplemented
+        super(PushupsService, self).__init__(PushUpsRepository())
 
 
 class RunningService(CrudService):

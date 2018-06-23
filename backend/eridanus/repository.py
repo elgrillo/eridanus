@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from eridanus.models import Crunch, Run, Weight, PushUp
+from eridanus.models import Crunch, Run, Weight, PushUp, JumpRope
 
 
 class Repository(object):
@@ -66,6 +66,37 @@ class WeightRepository(Repository):
         return NotImplemented
 
     def delete(self, id):
+        return NotImplemented
+
+
+class JumpRopeRepository(Repository):
+
+    def __init__(self):
+        super(JumpRopeRepository, self).__init__()
+
+    def fetch_all(self, username):
+        query = JumpRope.query(JumpRope.usernickname == username)
+        return query.order(-JumpRope.activity_date).fetch()
+
+    def create(self, dict):
+        model = JumpRope()
+        model.usernickname = dict['user_nickname']
+        model.creation_datetime = datetime.now()
+        model.activity_date = dict['activity_date']
+        model.activity_time = dict['activity_time']
+        model.duration = dict['duration']
+        model.calories = dict['calories']
+        model.count = dict['count']
+        model.notes = dict['notes']
+        return model.put()
+
+    def read(self, activity_id):
+        return NotImplemented
+
+    def update(self, activity):
+        return NotImplemented
+
+    def delete(self, activity_id):
         return NotImplemented
 
 
