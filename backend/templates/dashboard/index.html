@@ -40,9 +40,13 @@
 <input id="weighing_growth_rate_last20" type="hidden" value="{{stats['weighing']['growth_rate_last20']}}" />
 <input id="days_from_last_running_activity" type="hidden" value="{{stats['activities']['running']['days_from_last_run']}}" />
 <div class="panel panel-default">
+    Your BMI is <strong>{{'{:.1f}'.format(stats['bmi']['bmi'])}}</strong> - <strong>{{stats['bmi']['status']}}</strong>
+</div>
+<div class="panel panel-default">
     <div class="panel-body stats-panel">
         <p>Weight: <span class="stats-number">{{stats['weighing']['last_weight']}}</span> kg &nbsp;&nbsp; 
         <span id="weighing_status" class="label"> {{'{:+0.2f} %'.format(stats['weighing']['growth_rate_last20']) }}</span> </p>
+        <p>Desired weight: <span class="stats-number">{{'{:.1f}'.format(stats['objectives']['weight'])}}</span> kg</p>
         <p>Avg weight 20 days: <span class="stats-number">{{'{:0.1f}'.format(stats['weighing']['avg_last20'])}}</span> kg</p>
         <p>Last run date: <span class="stats-number">{{stats['activities']['running']['date_last_run']}}</span> 
         <span id="running_status" class="label">{{ stats['activities']['running']['days_from_last_run'] }} days ago</span></p>

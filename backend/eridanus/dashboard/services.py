@@ -1,4 +1,5 @@
 from eridanus.repository import StatisticsRepository
+from eridanus.services import BmiCalculatorService
 
 
 class DashboardService(object):
@@ -17,11 +18,22 @@ class DashboardService(object):
     def home_stats(self, username):
         running_stats = self.repository.running_stats(username)
         weighing_stats = self.repository.weighing_stats(username)
+        bmi_calculator = BmiCalculatorService(
+            weighing_stats['last_weight'],
+            1.82)
+        desired_weight = bmi_calculator.calculate_desired_weight(29.9)
         return {
+            'bmi': {
+                'bmi': bmi_calculator.bmi,
+                'status': bmi_calculator.status,
+            },
             'activities': {
                 'running': running_stats
             },
-            'weighing': weighing_stats
+            'weighing': weighing_stats,
+            'objectives': {
+                'weight': desired_weight
+            }
         }
 
     # def get_day_from_last_run_class(self):
