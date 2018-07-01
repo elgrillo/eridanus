@@ -13,9 +13,10 @@ class ActivityForm(FlaskForm):
         default=current_datetime,
         validators=[DataRequired])
     # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time 
+    # https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
     activity_time = StringField(
         label='activity_time',
-        default=current_datetime.time().strftime('%H:%M'),  # .strftime('%I:%M %p')
+        default=current_datetime.time().strftime('%H:%M'),
         validators=[DataRequired])
     duration = IntegerField()
     calories = IntegerField()

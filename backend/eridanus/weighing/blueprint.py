@@ -40,3 +40,33 @@ def create():
         form = WeightForm()
         return render_template('weighings/create.html', form=form)
 
+@weighings.route("/edit/<urlsafe>/", methods=['GET', 'POST'])
+def edit(urlsafe):
+    if request.method == 'POST':
+        form = WeightForm()
+        if (_validate_form(form)):
+            service.update({
+                'weight': float(form.weight.data),
+                'weighing_date': form.weighing_date.data,
+                'urlsafe': urlsafe
+            })
+            flash('Weighing record "%s" created successfully.', 'success')
+            return redirect(url_for('weighings.index'), 302)
+    else:
+        weighing = service.read(urlsafe)
+        if not weighing:
+            error = {}
+            error['message'] = "Running activity was not found for id {}".format(activity_urlsafe)
+            return page_not_found(error)
+        form = WeightForm()
+        form.weighing_date.data = weighing.weighing_date
+        form.weight.data = weighing.weight
+        return render_template('weighings/edit.html',
+                               urlsafe=urlsafe,
+                               form=form)
+
+
+@weighings.errorhandler(404)
+def page_not_found(e):
+    return render_template('pages/404.html', error=e)
+

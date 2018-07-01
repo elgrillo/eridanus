@@ -84,7 +84,7 @@ def edit(activity_urlsafe):
             return redirect(url_for('running_activities.index'), 302)
     else:
         activity = service.read(activity_urlsafe)
-        logging.info('Return activity object: {}'.format(activity))
+        # logging.info('Return activity object: {}'.format(activity))
         if not activity:
             error = {}
             error['message'] = "Running activity was not found for id {}".format(activity_urlsafe)
@@ -96,7 +96,7 @@ def edit(activity_urlsafe):
         form.calories.data = activity.calories
         form.distance.data = activity.distance
         form.notes.data = activity.notes
-        logging.info('Form duration: {}, activity duration {}'.format(form.activity_time.data, activity.activity_time))
+        # logging.info('Form duration: {}, activity duration {}'.format(form.activity_time.data, activity.activity_time))
         return render_template('activities/running/edit.html',
                                urlsafe=activity_urlsafe,
                                form=form)

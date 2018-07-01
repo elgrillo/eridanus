@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 <h1>Weight</h1>
-<form method="post" action="/weighings/create/">
+<form method="post" action=" {{ url_for('weighings.create') }}">
     {{ form.csrf_token }}
     <div class="form-group">
         <label for="weighing_date">Weighting Date</label>

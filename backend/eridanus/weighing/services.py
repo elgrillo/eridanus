@@ -20,6 +20,7 @@ class WeighingService(CrudService):
                 min_weight = m.weight
             items.append(
                 {
+                    'urlsafe': m.key.urlsafe(),
                     'weight': m.weight,
                     'weighing_date': format_date(m.weighing_date)
                 })
@@ -28,8 +29,8 @@ class WeighingService(CrudService):
     def create(self, weighing):
         return self.repository.create(weighing)
 
-    def read(self, id):
-        return self.repository.fetch(id)
+    def read(self, urlsafe):
+        return self.repository.read(urlsafe)
 
     def update(self, weighing):
         return self.repository.update(weighing)

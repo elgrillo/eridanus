@@ -68,8 +68,9 @@ class WeightRepository(Repository):
     def __init__(self):
         super(WeightRepository, self).__init__()
 
-    def fetch(self, id):
-        return NotImplemented
+    def read(self, urlsafe):
+        key = ndb.Key(urlsafe=urlsafe)
+        return key.get()
 
     def fetch_all(self, username):
         return (Weight
@@ -86,10 +87,15 @@ class WeightRepository(Repository):
         w.creation_datetime = datetime.now()
         return w.put()
 
-    def update(self, update):
-        return NotImplemented
+    def update(self, weighing):
+        key = ndb.Key(urlsafe=weighing['urlsafe'])
+        if key:
+            model = key.get()
+            model.weight = weighing['weight']
+            model.weighing_date = weighing['weighing_date']
+            return model.put()
 
-    def delete(self, id):
+    def delete(self, urlsafe):
         return NotImplemented
 
 

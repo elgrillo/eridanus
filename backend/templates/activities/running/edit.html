@@ -18,11 +18,11 @@
         </div>
         <div class="form-group">
             <label for="duration">Time (min)</label>
-            {{ form.duration(class_="form-control", type="number", placeholder="Enter time", required="required", **{'data-bind': 'value: duration'}) }}
+            {{ form.duration(class_="form-control", type="number", placeholder="Enter time", required="required", **{'data-bind': 'initFromInput:duration, value: duration'}) }}
         </div>
         <div class="form-group">
             <label for="distance">Distance (km)</label>
-            {{ form.distance(class_="form-control", type="number", placeholder="Enter distance", required="required", step="0.1", min=0,  **{'data-bind': 'value: distance'}) }}
+            {{ form.distance(class_="form-control", type="number", placeholder="Enter distance", required="required", step="0.1", min=0,  **{'data-bind': 'initFromInput:distance, value: distance'}) }}
         </div>
         <div style="font-weight: bold;">
             Speed <span data-bind="text: speed" style="color:#ff0000"></span> hm/h
@@ -47,6 +47,7 @@
             }
             return false;
         } 
+
         function RunViewModel() {
             this.duration = ko.observable();
             this.distance = ko.observable();
@@ -67,6 +68,14 @@
                 return speed;
             }, this);
         }
+
+        ko.bindingHandlers.initFromInput = {
+            // https://stackoverflow.com/questions/34696141/how-to-applybindings-and-keep-input-values-with-knockout-js
+            init: function(element, valueAccessor) {
+                valueAccessor()(element.value);
+            }
+        };
+
         ko.applyBindings(new RunViewModel());
     </script>
 {% endblock %}
