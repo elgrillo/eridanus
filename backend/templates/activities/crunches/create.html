@@ -10,32 +10,26 @@
     {{ form.csrf_token }}
     <div class="form-group">
         <label for="activity_date">Activity Date</label>
-        <!--<input id="date" type="date" class="form-control" required="required">-->
         {{ form.activity_date(class_="form-control", type="date", required="required") }}
     </div>
     <div class="form-group">
         <label for="activity_time">Activity Time</label>
-        <!--<input id="time" type="number"  class="form-control" placeholder="Enter time" required="required"></input>-->
-        {{ form.activity_time(class_="form-control", type="time", placeholder="Enter activity time", required="required", **{'data-bind': 'value: time'}) }}
+        <input id="activity_time" name="activity_time" class="form-control" required="required" value="{{ form.activity_time.data }}" type="time">
     </div>
     <div class="form-group">
         <label for="duration">Duration (min)</label>
-        <!--<input id="time" type="number"  class="form-control" placeholder="Enter time" required="required"></input>-->
-        {{ form.duration(class_="form-control", type="number", placeholder="Enter duration", **{'data-bind': 'value: duration'}) }}
+        {{ form.duration(class_="form-control", type="number", placeholder="Enter duration") }}
     </div>
     <div class="form-group">
         <label for="duration">Count</label>
-        <!--<input id="time" type="number"  class="form-control" placeholder="Enter time" required="required"></input>-->
-        {{ form.count(class_="form-control", type="number", placeholder="Enter number of crunches", **{'data-bind': 'value: count'}) }}
+        {{ form.count(class_="form-control", type="number", placeholder="Enter number of crunches") }}
     </div>
     <div class="form-group">
         <label for="calories">Calories (kcal)</label>
-        <!--<input id="calories" type="number"  class="form-control" placeholder="Enter calories" required="required"></input>-->
         {{ form.calories(class_="form-control", type="number", placeholder="Enter calories") }}
     </div>
     <div class="form-group">
         <label for="notes">Notes (max: 200 chars)</label>
-        <!--<input id="notes" type="text"  class="form-control" placeholder="Enter Notes" multiple="multiple" maxlength="200"/>-->
         {{ form.notes(class_="form-control", type="text", placeholder="Enter Notes", multiple="multiple", maxlength="200") }}
     </div>
     <button type="submit" class="btn btn-default">Submit</button>

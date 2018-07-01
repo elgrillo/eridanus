@@ -62,11 +62,11 @@ class RunningService(CrudService):
         self.repository = RunRepository()
 
     def fetch_all(self, username):
-        items = self._fetch(username)
+        items = self._fetch_all(username)
         records = self._compute_records(items)
         return {'items': items, 'records': records}
 
-    def _fetch(self, username):
+    def _fetch_all(self, username):
         items = []
         models = self.repository.fetch_all(username)
         for model in models:
@@ -82,7 +82,8 @@ class RunningService(CrudService):
                     'speed': speed,
                     'activity_date': format_date(model.activity_date),
                     'activity_time': format_time(model.activity_time),
-                    'calories': model.calories}
+                    'calories': model.calories,
+                    'urlsafe': model.key.urlsafe()}
             items.append(item)
         return items
 
@@ -105,11 +106,14 @@ class RunningService(CrudService):
     def create(self, activity):
         self.repository.create(activity)
 
-    def read(self, activity_id):
-        return NotImplemented
+    def read(self, activity_urlsafe):
+        import logging
+        logging.info(
+            'Read running entity having url_safe {}'.format(activity_urlsafe))
+        return self.repository.read(activity_urlsafe)
 
     def update(self, activity):
-        return NotImplemented
+        self.repository.update(activity)
 
     def delete(self, activity_id):
-        return NotImplemented
+        self.repository.delete(activity_id)

@@ -1,6 +1,8 @@
 from datetime import datetime
-
+from google.appengine.ext import ndb
 from eridanus.models import Crunch, Run, Weight, PushUp, JumpRope
+
+import logging
 
 
 class Repository(object):
@@ -23,21 +25,43 @@ class RunRepository(Repository):
         run.calories = dict['calories']
         run.notes = dict['notes']
         run.creation_datetime = datetime.now()
+
+        # returns the entity key: 
+        # see https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/appengine/standard/ndb/entities/snippets.py
         return run.put()
 
-    def delete(activity_id):
-        NotImplemented
+    def delete(self, activity_urlsafe):
+        activity_key = ndb.Key(urlsafe=dict['urlsafe'])
+        if activity_key:
+            return NotImplemented
 
     def fetch_all(self, username):
         ''' fetch data from data store '''
         query = Run.query(Run.usernickname == username)
         return query.order(-Run.activity_date).fetch()
 
-    def fetch(activity_id):
-        NotImplemented
+    def read(self, activity_urlsafe):
+        # TODO review it
+        # https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/appengine/standard/ndb/entities/snippets.py
+        # logging.info(
+        #    'Read running entity having url_safe {}'.format(activity_urlsafe))
+        activity_key = ndb.Key(urlsafe=activity_urlsafe)
+        activity = activity_key.get()
+        return activity
 
-    def update(self, activity):
-        NotImplemented
+    def update(self, dict):
+        activity_key = ndb.Key(urlsafe=dict['urlsafe'])
+        if activity_key:
+            activity = activity_key.get()
+            activity.activity_date = dict['activity_date']
+            activity.activity_time = dict['activity_time']
+            activity.duration = dict['duration']
+            activity.distance = dict['distance']
+            activity.speed = dict['speed']
+            activity.calories = dict['calories']
+            activity.notes = dict['notes']
+
+            return activity.put()
 
 
 class WeightRepository(Repository):
