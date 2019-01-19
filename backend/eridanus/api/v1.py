@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, session, jsonify
 from flask_restful import Api
 from .resources.dashboard import Dashboard
 from .resources.activities import Running
@@ -9,14 +9,14 @@ api = Api(api_blueprint)
 api.add_resource(Dashboard, '/stats/')
 api.add_resource(Running, '/activities/running/')
 
-# @api.route('/stats/', methods=['GET'])
-# def get_stats():
-#     username = session['nickname']
-#     if username:
-#         stats = DashboardService().home_stats(username)
-#         return jsonify(stats)
-#     else:
-#         return jsonify({'error': 'Access denied'})
+
+@api.route('/stats/', methods=['GET'])
+def get_stats():
+    username = session['nickname']
+    if username:
+        return jsonify({'message': 'hello world'})
+    else:
+        return jsonify({'error': 'Access denied'})
 
 
 # @api.route('/activities/running/', methods=['GET'])
